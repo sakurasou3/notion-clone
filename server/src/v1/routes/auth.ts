@@ -4,7 +4,8 @@ import "dotenv/config";
 
 import { User } from "../models/user";
 import { validate } from "../handlers/validation";
-import { register } from "../controllers/user";
+import { login, register } from "../controllers/user";
+import { verifyToken } from "../handlers/tokenHandler";
 
 export const router = Router();
 module.exports = router;
@@ -32,3 +33,19 @@ router.post(
 );
 
 // ユーザーログインAPI
+router.post(
+  "/login",
+  body("username")
+    .isLength({ min: 8 })
+    .withMessage("ユーザー名は8文字以上である必要があります"),
+  body("password")
+    .isLength({ min: 8 })
+    .withMessage("パスワードは8文字以上である必要があります"),
+  validate,
+  login
+);
+
+// JWT認証API
+router.post("/verify-token", verifyToken, (req: any, res: any) => {
+  return res.status(200).json({ user: req.user });
+});
