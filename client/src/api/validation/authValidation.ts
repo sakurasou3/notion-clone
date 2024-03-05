@@ -32,3 +32,17 @@ export const registerValidation = (
   }
   return errors;
 };
+
+export const loginValidation = (username: string, password: string) => {
+  const errors: Array<errorType> = [];
+  if (username === "") {
+    errors.push({ key: "username", errorString: "名前を入力してください" });
+  }
+  if (password === "") {
+    errors.push({
+      key: "password",
+      errorString: "パスワードを入力してください",
+    });
+  }
+  return errors;
+};

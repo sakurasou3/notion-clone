@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -36,15 +37,6 @@ export const Register = () => {
         setConfirmErrText(err.errorString);
       }
     });
-    errors
-      .filter((err) => err.key === "username")
-      .map((e) => setUsernameErrText(e.errorString));
-    errors
-      .filter((err) => err.key === "password")
-      .map((e) => setPasswordErrText(e.errorString));
-    errors
-      .filter((err) => err.key === "confirm")
-      .map((e) => setConfirmErrText(e.errorString));
     if (errors.length > 0) return;
 
     setLoading(true);
@@ -60,7 +52,6 @@ export const Register = () => {
     } catch (error: any) {
       const errors = error.data.errors;
       console.log(errors);
-      // eslint-disable-next-line array-callback-return
       errors.map((err: { path: string; msg: React.SetStateAction<string> }) => {
         if (err.path === "username") {
           setUsernameErrText(err.msg);
