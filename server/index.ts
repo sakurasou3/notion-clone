@@ -1,11 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
-app.use("/api/v1", require("./src/v1/routes/auth"));
-
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  })
+);
+app.use("/api/v1", require("./src/v1/routes"));
 // DB接続
 try {
   mongoose.connect(process.env.MONGODB_URL!);
