@@ -14,9 +14,15 @@ interface LoginParam {
 interface Response {
   token: string;
 }
+
+interface UserResponse {
+  user: { id: string };
+}
 export const authApi = {
   register: (params: RegisterParam): Promise<Response> =>
     axiosClient.post("auth/register", params),
   login: (params: LoginParam): Promise<Response> =>
     axiosClient.post("auth/login", params),
+  verifyToken: (): Promise<UserResponse> =>
+    axiosClient.post("auth/verify-token"),
 };
