@@ -11,9 +11,11 @@ import { AddBoxOutlined } from "@mui/icons-material";
 import { LogoutOutlined } from "@mui/icons-material";
 import assets from "../../assets";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../redux/store";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const user = useAppSelector((state) => state.user);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -44,7 +46,7 @@ const Sidebar = () => {
             }}
           >
             <Typography variant="body2" fontWeight={700}>
-              notionUser
+              {user.username}
             </Typography>
             <IconButton onClick={logout}>
               <LogoutOutlined />

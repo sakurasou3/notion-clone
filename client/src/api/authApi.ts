@@ -1,4 +1,5 @@
 import axiosClient from "./axiosClient";
+import { User } from "./types/auth";
 
 interface RegisterParam {
   username: string;
@@ -16,7 +17,7 @@ interface Response {
 }
 
 interface UserResponse {
-  user: { id: string };
+  user: User;
 }
 export const authApi = {
   register: (params: RegisterParam): Promise<Response> =>
