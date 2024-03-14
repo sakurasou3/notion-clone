@@ -14,3 +14,13 @@ export const create = async (req: any, res: any) => {
     res.status(500).json(err);
   }
 };
+
+export const getAll = async (req: any, res: any) => {
+  try {
+    // sort: positionの降順でソート
+    const memos = await Memo.find({ user: req.user._id }).sort("-position");
+    res.status(200).json(memos);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};

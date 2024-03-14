@@ -1,15 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./features/userSlice";
 import {
   TypedUseSelectorHook,
   useDispatch,
   useSelector,
   useStore,
 } from "react-redux";
+import userReducer from "./features/userSlice";
+import memoReducer from "./features/memoSlice";
 
 const store = configureStore({
   reducer: {
     user: userReducer,
+    memo: memoReducer,
   },
 });
 
