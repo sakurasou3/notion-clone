@@ -16,8 +16,14 @@ export const userSlice = createSlice({
       state = [...state, action.payload];
       return state;
     },
+    updateMemo: (state, action: PayloadAction<Memo>) => {
+      state = state.map((memo) =>
+        memo._id === action.payload._id ? action.payload : memo
+      );
+      return state;
+    },
   },
 });
 
-export const { setMemo, addMemo } = userSlice.actions;
+export const { setMemo, addMemo, updateMemo } = userSlice.actions;
 export default userSlice.reducer;

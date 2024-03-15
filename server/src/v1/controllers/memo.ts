@@ -24,3 +24,45 @@ export const getAll = async (req: any, res: any) => {
     res.status(500).json(err);
   }
 };
+
+export const getOne = async (req: any, res: any) => {
+  try {
+    const memo = await Memo.findOne({
+      user: req.user._id,
+      _id: req.params.memoId,
+    });
+    if (!memo) return res.status(404).json({ error: "メモが存在しません" });
+    res.status(200).json(memo);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const update = async (req: any, res: any) => {
+  const { memoId } = req.params;
+  const { title, description } = req.body;
+  try {
+    // 空欄の場合はdefault値で置き換え
+    if (title === "") req.body.title = "無題";
+    if (description === "")
+      req.body.description = "ここに自由に記入してください。";
+
+    const memo = await Memo.findOne({
+      user: req.user._id,
+      _id: memoId,
+    });
+    if (!memo) return res.status(404).json({ error: "メモが存在しません" });
+
+    const updatedMemo = await Memo.findByIdAndUpdate(
+      memoId,
+      {
+        $set: req.body,
+      },
+      { new: true } // これがないと更新後の情報を返してくれない
+    );
+
+    res.status(200).json(updatedMemo);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
