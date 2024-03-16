@@ -12,4 +12,5 @@ export const memoApi = {
   getOne: (id: string): Promise<Response> => axiosClient.get(`memo/${id}`),
   update: (id: string, params: UpdateParam): Promise<Response> =>
     axiosClient.put(`memo/${id}`, params),
+  delete: (id: string): Promise<void> => axiosClient.delete(`memo/${id}`),
 };

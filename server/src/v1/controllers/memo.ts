@@ -66,3 +66,20 @@ export const update = async (req: any, res: any) => {
     res.status(500).json(err);
   }
 };
+
+export const deleteMemo = async (req: any, res: any) => {
+  const { memoId } = req.params;
+  try {
+    const memo = await Memo.findOne({
+      user: req.user._id,
+      _id: memoId,
+    });
+    if (!memo) return res.status(404).json({ error: "メモが存在しません" });
+
+    await Memo.findByIdAndDelete(memoId);
+
+    res.status(200).json("メモを削除しました");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};

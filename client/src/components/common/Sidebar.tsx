@@ -13,7 +13,7 @@ import assets from "../../assets";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { memoApi } from "../../api/memoApi";
-import { setMemo } from "../../redux/features/memoSlice";
+import { addMemo, setMemo } from "../../redux/features/memoSlice";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -27,6 +27,16 @@ const Sidebar = () => {
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/login");
+  };
+
+  const createMemo = async () => {
+    try {
+      const response = await memoApi.create();
+      dispatch(addMemo(response));
+      navigate(`/memo/${response._id}`);
+    } catch (err) {
+      alert(err);
+    }
   };
 
   useEffect(() => {
@@ -105,7 +115,7 @@ const Sidebar = () => {
             <Typography variant="body2" fontWeight={700}>
               プライベート
             </Typography>
-            <IconButton>
+            <IconButton onClick={createMemo}>
               <AddBoxOutlined fontSize="small" />
             </IconButton>
           </Box>

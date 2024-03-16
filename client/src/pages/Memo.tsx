@@ -1,16 +1,21 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Box, IconButton, TextField } from "@mui/material";
 import { DeleteOutline, StarBorderOutlined } from "@mui/icons-material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { memoApi } from "../api/memoApi";
 import { Memo as MemoType } from "../api/types/memo";
-import { useAppDispatch } from "../redux/store";
-import { updateMemo } from "../redux/features/memoSlice";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import {
+  updateMemo,
+  deleteMemo as deleteMemoData,
+} from "../redux/features/memoSlice";
 
 export const Memo = () => {
   const { memoId } = useParams();
   const [memo, setMemo] = useState<MemoType | undefined>();
   const dispatch = useAppDispatch();
+  const memos = useAppSelector((state) => state.memo);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getOneMemo = async () => {
@@ -63,6 +68,22 @@ export const Memo = () => {
     }, timeout);
   };
 
+  const deleteMemo = async () => {
+    try {
+      await memoApi.delete(memoId!);
+      dispatch(deleteMemoData({ _id: memoId! }));
+
+      const newMemos = memos.filter((m) => m._id !== memoId);
+      if (newMemos.length === 0) {
+        navigate("/memo");
+      } else {
+        navigate(`/memo/${newMemos[0]._id}`);
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <>
       <Box
@@ -75,7 +96,7 @@ export const Memo = () => {
         <IconButton>
           <StarBorderOutlined />
         </IconButton>
-        <IconButton color="error">
+        <IconButton color="error" onClick={deleteMemo}>
           <DeleteOutline />
         </IconButton>
       </Box>

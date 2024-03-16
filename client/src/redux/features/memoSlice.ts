@@ -22,8 +22,12 @@ export const userSlice = createSlice({
       );
       return state;
     },
+    deleteMemo: (state, action: PayloadAction<{ _id: string }>) => {
+      state = state.filter((memo) => memo._id !== action.payload._id);
+      return state;
+    },
   },
 });
 
-export const { setMemo, addMemo, updateMemo } = userSlice.actions;
+export const { setMemo, addMemo, updateMemo, deleteMemo } = userSlice.actions;
 export default userSlice.reducer;

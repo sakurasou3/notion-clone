@@ -1,6 +1,12 @@
 import { Router } from "express";
 
-import { create, getAll, getOne, update } from "../controllers/memo";
+import {
+  create,
+  deleteMemo,
+  getAll,
+  getOne,
+  update,
+} from "../controllers/memo";
 import { verifyToken } from "../handlers/tokenHandler";
 
 export const router = Router();
@@ -14,3 +20,5 @@ router.get("/", verifyToken, getAll);
 router.get("/:memoId", verifyToken, getOne);
 // 特定のメモ更新API
 router.put("/:memoId", verifyToken, update);
+// 特定のメモ削除API
+router.delete("/:memoId", verifyToken, deleteMemo);
