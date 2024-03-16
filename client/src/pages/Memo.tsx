@@ -9,6 +9,7 @@ import {
   updateMemo,
   deleteMemo as deleteMemoData,
 } from "../redux/features/memoSlice";
+import { EmojiPicker } from "../components/common/EmojiPicker";
 
 export const Memo = () => {
   const { memoId } = useParams();
@@ -68,6 +69,18 @@ export const Memo = () => {
     }, timeout);
   };
 
+  const updateIcon = async (icon: string) => {
+    const newMemo = { ...memo!, icon };
+    setMemo(newMemo);
+
+    try {
+      const response = await memoApi.update(memoId!, newMemo);
+      dispatch(updateMemo(response));
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   const deleteMemo = async () => {
     try {
       await memoApi.delete(memoId!);
@@ -100,44 +113,47 @@ export const Memo = () => {
           <DeleteOutline />
         </IconButton>
       </Box>
-      <Box sx={{ p: "10pz 50px" }}>
-        <TextField
-          placeholder="無題"
-          value={memo && memo.title}
-          variant="outlined"
-          fullWidth
-          sx={{
-            ".MuiOutlinedInput-input": {
-              padding: 0,
-            },
-            ".MuiOutlinedInput-notchedOutline": {
-              border: "none",
-            },
-            ".MuiOutlinedInput-root": {
-              fontSize: "2rem",
-              fontWeight: "700",
-            },
-          }}
-          onChange={updateTitle}
-        />
-        <TextField
-          placeholder="追加"
-          variant="outlined"
-          value={memo && memo.description}
-          fullWidth
-          sx={{
-            ".MuiOutlinedInput-input": {
-              padding: 0,
-            },
-            ".MuiOutlinedInput-notchedOutline": {
-              border: "none",
-            },
-            ".MuiOutlinedInput-root": {
-              fontSize: "1rem",
-            },
-          }}
-          onChange={updateDescription}
-        />
+      <Box sx={{ p: "10px 50px" }}>
+        <Box>
+          <EmojiPicker icon={memo?.icon ?? ""} onUpdateIcon={updateIcon} />
+          <TextField
+            placeholder="無題"
+            value={memo && memo.title}
+            variant="outlined"
+            fullWidth
+            sx={{
+              ".MuiOutlinedInput-input": {
+                padding: 0,
+              },
+              ".MuiOutlinedInput-notchedOutline": {
+                border: "none",
+              },
+              ".MuiOutlinedInput-root": {
+                fontSize: "2rem",
+                fontWeight: "700",
+              },
+            }}
+            onChange={updateTitle}
+          />
+          <TextField
+            placeholder="追加"
+            variant="outlined"
+            value={memo && memo.description}
+            fullWidth
+            sx={{
+              ".MuiOutlinedInput-input": {
+                padding: 0,
+              },
+              ".MuiOutlinedInput-notchedOutline": {
+                border: "none",
+              },
+              ".MuiOutlinedInput-root": {
+                fontSize: "1rem",
+              },
+            }}
+            onChange={updateDescription}
+          />
+        </Box>
       </Box>
     </>
   );
